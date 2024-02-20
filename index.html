@@ -1,17 +1,74 @@
 <html>
     <head>
-        <title>Meal Planner</title>
-
+        <title>mealdropdown Planner</title>
+        <style>
+            td{ 
+                width: 100px;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
         <p id="datetime"></p>
+        
+        <table>
+            <tr>
+                <th></th>
+                <th id="dayoftheweek-Sunday">Sunday</th>
+                <th id="dayoftheweek-Monday">Monday</th>
+                <th id="dayoftheweek-Tuesday">Tuesday</th>
+                <th id="dayoftheweek-Wednesday">Wednesday</th>
+                <th id="dayoftheweek-Thursday">Thursday</th>
+                <th id="dayoftheweek-Friday">Friday</th>
+                <th id="dayoftheweek-Saturday">Saturday</th>
+            </tr>
+            <tr>
+                <td>Breakfast</td>
+                <td><select class="mealdropdown" id="sunday-breakfast"></select></td>
+                <td><select class="mealdropdown" id="monday-breakfast"></select></td>
+                <td><select class="mealdropdown" id="tuesday-breakfast"></select></td>
+                <td><select class="mealdropdown" id="wednesday-breakfast"></select></td>
+                <td><select class="mealdropdown" id="thursday-breakfast"></select></td>
+                <td><select class="mealdropdown" id="friday-breakfast"></select></td>
+                <td><select class="mealdropdown" id="saturday-breakfast"></select></td>
+            </tr>
+            <tr>
+                <td>Lunch</td>
+                <td><select class="mealdropdown" id="sunday-lunch"></select></td>
+                <td><select class="mealdropdown" id="monday-lunch"></select></td>
+                <td><select class="mealdropdown" id="tuesday-lunch"></select></td>
+                <td><select class="mealdropdown" id="wednesday-lunch"></select></td>
+                <td><select class="mealdropdown" id="thursday-lunch"></select></td>
+                <td><select class="mealdropdown" id="friday-lunch"></select></td>
+                <td><select class="mealdropdown" id="saturday-lunch"></select></td>
+            </tr>
+            <tr>
+                <td>Dinner</td>
+                <td><select class="mealdropdown" id="sunday-dinner"></select></td>
+                <td><select class="mealdropdown" id="monday-dinner"></select></td>
+                <td><select class="mealdropdown" id="tuesday-dinner"></select></td>
+                <td><select class="mealdropdown" id="wednesday-dinner"></select></td>
+                <td><select class="mealdropdown" id="thursday-dinner"></select></td>
+                <td><select class="mealdropdown" id="friday-dinner"></select></td>
+                <td><select class="mealdropdown" id="saturday-dinner"></select></td>
+              </tr>
+          </table>
 
-
-        <button></button>
+          <textarea></textarea>
     </body>
     <script>
-        var now = new Date();
-        var datetime = now.toLocaleString();
-        document.getElementById("datetime").innerHTML = datetime;
+        var datetime = new Date().toLocaleString().split(',',1);
+        let date = new Date(datetime);
+        let day = date.toLocaleString('en-us', {weekday: 'long'});
+        document.getElementById("dayoftheweek-"+day).style.color="blue";
+        
+        populateDropdowns();
+
+        function populateDropdowns(){
+            var foodselectors = document.querySelectorAll(".mealdropdown");
+            for (var i = 0; i < foodselectors.length; i++) {
+                foodselectors[i].innerHTML="<option value='spaghetti'>Spaghetti</option>";
+            }
+        }
     </script>
 </html>

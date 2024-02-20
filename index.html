@@ -1,17 +1,89 @@
 <html>
     <head>
-        <title>mealdropdown Planner</title>
+        <title>Meal Planner</title>
         <style>
             td{ 
                 width: 100px;
                 text-align: center;
             }
+            .horizontal-center {
+                margin: 0;
+                position: absolute;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+            body{
+                background-color: rgb(240, 240, 240);
+            }
+            .card {
+                background-color: lightblue;
+                width: 300px;
+                border-radius: 7px;
+                display: inline-block;
+                margin-left: 10px;
+                vertical-align: text-top;
+                margin-top: 15px;
+            }
+            .spacer {
+                padding: 12px;
+            }
+            .food {
+                font-weight: bold;
+            }
         </style>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+        <script>
+            $(document).ready(function(){
+                $("#calcBtn").click(function(){
+                    var foodselectors = [];
+                    $(".mealdropdown").each(function(){
+                        foodselectors.push($(this).val());
+                    });
+                    var homeLeftoverCount = 0;
+                    var workLeftoverCount = 0;
+                    var ingredientsArray = [];
+
+
+                    for (var i = 0; i < foodselectors.length; i++) {
+                        if (foodselectors[i]=="HomeLeftovers"){
+                            homeLeftoverCount--;
+                        } else if (foodselectors[i]=="WorkLeftovers"){
+                            workLeftoverCount--;
+                        } else if (foodselectors[i]!="Nothing"){
+                            var leftoverType = "Work";
+                        
+                            if (leftoverType == "Home"){
+                                homeLeftoverCount++;
+                            } else if (leftoverType == "Work"){
+                                workLeftoverCount++;
+                            } 
+                        }
+                    }
+                    $("#homeLeftovers").html(homeLeftoverCount);
+                    
+                    console.log(foodselectors[1]);
+                });
+            });
+
+            $(function() {
+                var people = [];
+                $.getJSON('dictionary.json', function(data) {
+                    $.each(data.recipes, function(i, f) {
+                        var newCard = "<div class='Card'> <div class='spacer'> <div class='Food'>"+f.Food+"<br></div> <div class='Ingredients'>Ingredients:<br>"+f.Ingredients+"<br><br></div> <div class='Steps'>Steps:<br>"+f.Steps+"<br><br></div> <div class='Leftovers'>Leftovers:"+f.Leftovers+"</div> </div> </div>";
+                        $(newCard).appendTo("#recipebook-child");
+
+                        var newOption = "<option value='"+f.Food+"'>"+f.Food+"</option>";
+                        $(newOption).appendTo(".mealdropdown");
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
         <p id="datetime"></p>
         
-        <table>
+        <table id="weekdaytable">
             <tr>
                 <th></th>
                 <th id="dayoftheweek-Sunday">Sunday</th>
@@ -54,21 +126,67 @@
               </tr>
           </table>
 
-          <textarea></textarea>
+          <br>
+          <div id="calculation-station">
+            <button id="calcBtn">Calculate Groceries/Leftovers</button><br>
+            <p style="display: inline-block;">Home Leftovers: &nbsp;</p><p id="homeLeftovers" style="display: inline-block;">N/A</p>
+            <br>
+            <p style="display: inline-block;">Work Leftovers: &nbsp;</p><p id="workLeftovers" style="display: inline-block;">N/A</p>
+            <p>Ingredients Needed:</p>
+            <ul id="ingredientslist"> 
+                <li>N/A</li>
+            </ul>
+          </div>
+          <br>
+          <br>
+
+          <div id="recipebook">
+            <input placeholder="Search Recipes"></input>
+            <button>+</button>
+            <br><br>
+            <div id="recipebook-child"></div>
+          </div>
+
+
     </body>
     <script>
+        // Main Page
         var datetime = new Date().toLocaleString().split(',',1);
         let date = new Date(datetime);
         let day = date.toLocaleString('en-us', {weekday: 'long'});
         document.getElementById("dayoftheweek-"+day).style.color="blue";
-        
-        populateDropdowns();
 
+        populateDropdowns();
         function populateDropdowns(){
+            var foodlist = document.getElementsByClassName("Food");
             var foodselectors = document.querySelectorAll(".mealdropdown");
             for (var i = 0; i < foodselectors.length; i++) {
-                foodselectors[i].innerHTML="<option value='spaghetti'>Spaghetti</option>";
+                foodselectors[i].innerHTML="<option value='Nothing'>Nothing</option>";
+                foodselectors[i].innerHTML+="<option value='HomeLeftovers'>Home Leftovers</option>";
+                foodselectors[i].innerHTML+="<option value='WorkLeftovers'>Work Leftovers</option>";
             }
         }
+
+        /*function calc_stats(){
+            var foodselectors = document.querySelectorAll(".mealdropdown");
+            var homeLeftoverCount = 0;
+            var workLeftoverCount = 0;
+            var ingredientsArray = [];
+            for (var i = 0; i < foodselectors.length; i++) {
+                if (foodselectors[i].value=="Home Leftovers"){
+                    homeLeftoverCount--;
+                } else if (foodselectors[i].value=="Work Leftovers"){
+                    workLeftoverCount--;
+                } else if (foodselectors[i].value!="Nothing"){
+                    var leftoverType = "Work";
+                
+                    if (leftoverType == "Home"){
+                        homeLeftoverCount++;
+                    } else if (leftoverType == "Work"){
+                        workLeftoverCount++;
+                    } 
+                }
+            }
+        }*/
     </script>
 </html>

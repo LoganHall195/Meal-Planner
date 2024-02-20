@@ -1,1 +1,28 @@
-
+{
+    "recipes":[
+            {   
+                "Food": "Spaghetti",
+                "Ingredients": ["1 lb Noodles", "1 lb Ground Beef", "32 oz Marinara Sauce"],
+                "Steps": ["Boil noodles", "Cook meat", "Mix meat and sauce"],
+                "Leftovers": "Home"
+            },
+            { 
+                "Food": "Fried Rice",
+                "Ingredients": [ "4 cups Rice", "1 Sausage", "6 Eggs", "1 package Broccoli", "Oyster Sauce", "Soy Sauce", "Sesame Oil" ],
+                "Steps": ["Steam rice", "Cook meat", "Cook broccoli", "Add rice", "Add sauces", "Add eggs"],
+                "Leftovers": "Work"
+            },
+            {
+                "Food": "Bacon & Eggs",
+                "Ingredients": ["8 Eggs", "0.5 package Bacon"],
+                "Steps": ["Boil noodles", "Cook meat", "Mix meat and sauce"],
+                "Leftovers": ""
+            },
+            {
+                "Food": "Ham & Cheese - Hot Pocket",
+                "Ingredients": ["2 Ham & Cheese - Hot Pockets"],
+                "Steps": ["Microwave"],
+                "Leftovers": ""
+            }
+    ]
+}

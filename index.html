@@ -75,6 +75,16 @@
                 <td><select class="mealdropdown" id="saturday-breakfast"></select></td>
             </tr>
             <tr>
+                <td></td>
+                <td><select class="sidedropdown" id="sunday-breakfast-side"></select></td>
+                <td><select class="sidedropdown" id="monday-breakfast-side"></select></td>
+                <td><select class="sidedropdown" id="tuesday-breakfast-side"></select></td>
+                <td><select class="sidedropdown" id="wednesday-breakfast-side"></select></td>
+                <td><select class="sidedropdown" id="thursday-breakfast-side"></select></td>
+                <td><select class="sidedropdown" id="friday-breakfast-side"></select></td>
+                <td><select class="sidedropdown" id="saturday-breakfast-side"></select></td>
+            </tr>
+            <tr>
                 <td>Lunch</td>
                 <td><select class="mealdropdown" id="sunday-lunch"></select></td>
                 <td><select class="mealdropdown" id="monday-lunch"></select></td>
@@ -85,6 +95,16 @@
                 <td><select class="mealdropdown" id="saturday-lunch"></select></td>
             </tr>
             <tr>
+                <td></td>
+                <td><select class="sidedropdown" id="sunday-lunch-side"></select></td>
+                <td><select class="sidedropdown" id="monday-lunch-side"></select></td>
+                <td><select class="sidedropdown" id="tuesday-lunch-side"></select></td>
+                <td><select class="sidedropdown" id="wednesday-lunch-side"></select></td>
+                <td><select class="sidedropdown" id="thursday-lunch-side"></select></td>
+                <td><select class="sidedropdown" id="friday-lunch-side"></select></td>
+                <td><select class="sidedropdown" id="saturday-lunch-side"></select></td>
+            </tr>
+            <tr>
                 <td>Dinner</td>
                 <td><select class="mealdropdown" id="sunday-dinner"></select></td>
                 <td><select class="mealdropdown" id="monday-dinner"></select></td>
@@ -93,15 +113,25 @@
                 <td><select class="mealdropdown" id="thursday-dinner"></select></td>
                 <td><select class="mealdropdown" id="friday-dinner"></select></td>
                 <td><select class="mealdropdown" id="saturday-dinner"></select></td>
-              </tr>
+            </tr>
+            <tr>
+                <td></td>
+                <td><select class="sidedropdown" id="sunday-dinner-side"></select></td>
+                <td><select class="sidedropdown" id="monday-dinner-side"></select></td>
+                <td><select class="sidedropdown" id="tuesday-dinner-side"></select></td>
+                <td><select class="sidedropdown" id="wednesday-dinner-side"></select></td>
+                <td><select class="sidedropdown" id="thursday-dinner-side"></select></td>
+                <td><select class="sidedropdown" id="friday-dinner-side"></select></td>
+                <td><select class="sidedropdown" id="saturday-dinner-side"></select></td>
+            </tr>
           </table>
 
           <br>
           <div id="calculation-station">
             <button id="calcBtn" onclick="calc_stats()">Calculate Groceries/Leftovers</button><br>
-            <p style="display: inline-block;">Home Leftovers: &nbsp;</p><p id="homeLeftovers" style="display: inline-block;">N/A</p>
+            <p style="display: inline-block;">Extra Home Leftovers: &nbsp;</p><p id="homeLeftovers" style="display: inline-block;">N/A</p>
             <br>
-            <p style="display: inline-block;">Work Leftovers: &nbsp;</p><p id="workLeftovers" style="display: inline-block;">N/A</p>
+            <p style="display: inline-block;">Extra Work Leftovers: &nbsp;</p><p id="workLeftovers" style="display: inline-block;">N/A</p>
             <p>Ingredients Needed:</p>
             <ul id="ingredientslist"> 
                 <li>N/A</li>
@@ -128,37 +158,97 @@
 
         populateDropdowns();
         function populateDropdowns(){
-            var foodlist = document.getElementsByClassName("Food");
-            var foodselectors = document.querySelectorAll(".mealdropdown");
-            for (var i = 0; i < foodselectors.length; i++) {
-                foodselectors[i].innerHTML="<option value='Nothing'>Nothing</option>";
-                foodselectors[i].innerHTML+="<option value='HomeLeftovers'>Home Leftovers</option>";
-                foodselectors[i].innerHTML+="<option value='WorkLeftovers'>Work Leftovers</option>";
+            var mealselectors = document.querySelectorAll(".mealdropdown");
+            for (var i = 0; i < mealselectors.length; i++) {
+                mealselectors[i].innerHTML="<option value='Nothing'>Nothing</option>";
+                mealselectors[i].innerHTML+="<option value='HomeLeftovers'>Home Leftovers</option>";
+                mealselectors[i].innerHTML+="<option value='WorkLeftovers'>Work Leftovers</option>";
+            }
+
+            var sideselectors = document.querySelectorAll(".sidedropdown");
+            for (var i = 0; i < sideselectors.length; i++) {
+                sideselectors[i].innerHTML="<option value='Nothing'>Nothing</option>";
+                sideselectors[i].innerHTML+="<option value='HomeLeftovers'>Home Leftovers</option>";
+                sideselectors[i].innerHTML+="<option value='WorkLeftovers'>Work Leftovers</option>";
             }
         }
 
-        function calc_stats(){
-            var foodselectors = document.querySelectorAll(".mealdropdown");
+        function customSort(a, b) { //sort in descending order
+            let numA = parseInt(a.match(/\d+/)[0]);
+            let numB = parseInt(b.match(/\d+/)[0]);
+            return numB - numA;
+        }
+
+        function calc_stats() {
+            var mealselectors = document.querySelectorAll(".mealdropdown");
             var homeLeftoverCount = 0;
             var workLeftoverCount = 0;
             var ingredientsArray = [];
-            for (var i = 0; i < foodselectors.length; i++) {
-                if (foodselectors[i].value=="HomeLeftovers"){
+            document.getElementById("ingredientslist").innerHTML = '';
+            var mergedIngredients = {};
+
+            for (var i = 0; i < mealselectors.length; i++) {
+                if (mealselectors[i].value == "HomeLeftovers") {
                     homeLeftoverCount--;
-                } else if (foodselectors[i].value=="WorkLeftovers"){
+                } else if (mealselectors[i].value == "WorkLeftovers") {
                     workLeftoverCount--;
-                } else if (foodselectors[i].value!="Nothing"){
-                    var leftoverType = "Work";
-                
-                    if (leftoverType == "Home"){
-                        homeLeftoverCount++;
-                    } else if (leftoverType == "Work"){
-                        workLeftoverCount++;
-                    } 
+                } else if (mealselectors[i].value != "Nothing") {
+                    var jsonData = JSON.parse(localStorage.getItem("jsonData"));
+
+                    for (var j = 0; j < jsonData.recipes.length; j++) {
+                        if (jsonData.recipes[j].Food == mealselectors[i].value) {
+                            if (jsonData.recipes[j].Leftovers == "Home") {
+                                homeLeftoverCount++;
+                            } else if (jsonData.recipes[j].Leftovers == "Work") {
+                                workLeftoverCount++;
+                            }
+
+                            for (var k = 0; k < jsonData.recipes[j].Ingredients.length; k++) {
+                                var ingredient = jsonData.recipes[j].Ingredients[k];
+                                var matches = ingredient.match(/^([\d.]+)\s*(.+)/);
+                                
+                                if (matches && matches.length === 3) {
+                                    var quantity = parseFloat(matches[1]);
+                                    var name = matches[2].trim();
+                                    
+                                    if (mergedIngredients.hasOwnProperty(name)) {
+                                        mergedIngredients[name] += quantity;
+                                    } else {
+                                        mergedIngredients[name] = quantity;
+                                    }
+                                } else {
+                                    var quantity = 0;
+                                    var name = ingredient;
+                                    mergedIngredients[name] = quantity;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            document.getElementById("homeLeftovers").textContent=homeLeftoverCount;
-            document.getElementById("workLeftovers").textContent=workLeftoverCount;
+
+            for (var ingredient in mergedIngredients) {
+                ingredientsArray.push(mergedIngredients[ingredient] + " " + ingredient);
+            }
+
+            let sortedArr = ingredientsArray.sort(customSort);
+            ingredientsArray = sortedArr;
+            
+            for (let i = 0; i < ingredientsArray.length; i++) {
+                if (ingredientsArray[i].startsWith("0 ")) {
+                    ingredientsArray[i] = ingredientsArray[i].substring(2);
+                }
+
+                let listItem = document.createElement("li");
+                listItem.textContent = ingredientsArray[i];
+                document.getElementById("ingredientslist").appendChild(listItem);
+            }
+            
+            console.log("Merged Ingredients:", ingredientsArray);
+            
+
+            document.getElementById("homeLeftovers").textContent = homeLeftoverCount;
+            document.getElementById("workLeftovers").textContent = workLeftoverCount;
         }
     </script>
 </html>
